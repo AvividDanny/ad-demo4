@@ -1,119 +1,147 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="ad.size" content="width=300,height=250">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6張圖 3D Carousel (整張圖片可點擊)</title>
   <style>
     body {
       margin: 0;
-      overflow: hidden;
-    }
-    #carousel-container {
+      padding: 0;
+      font-family: Arial, sans-serif;
       width: 300px;
       height: 250px;
-      background: #000;
+      overflow: hidden;
+      background: transparent;
+    }
+    #carousel {
+      width: 300px;
+      height: 250px;
       position: relative;
+      perspective: 600px;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 800px;
     }
-    .carousel {
-      display: flex;
-      transition: transform 0.5s ease;
-      transform-style: preserve-3d;
-    }
-    .carousel-item {
+    .slide {
+      width: 70%;
+      height: 80%;
       position: absolute;
-      width: 300px;
-      height: 250px;
+      top: 10%;
+      left: 15%;
       background-size: cover;
       background-position: center;
-      border-radius: 8px;
-      transform-origin: center;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
       cursor: pointer;
+      opacity: 0.5;
+      transition: transform 0.8s ease, opacity 0.8s ease;
     }
-    .carousel-item .btn {
+    .slide.active {
+      opacity: 1;
+      transform: scale(1) translateX(0) rotateY(0deg);
+      z-index: 3;
+    }
+    .slide.left {
+      transform: scale(0.7) translateX(-140px) rotateY(45deg);
+      z-index: 2;
+    }
+    .slide.right {
+      transform: scale(0.7) translateX(140px) rotateY(-45deg);
+      z-index: 2;
+    }
+    .cta {
       position: absolute;
       bottom: 10px;
       right: 10px;
-      padding: 5px 10px;
-      background: rgba(0,0,0,0.6);
+      background: #ff6600;
       color: white;
+      padding: 5px 8px;
       font-size: 12px;
       border-radius: 4px;
-    }
-    #close-btn {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: #fff;
-      border-radius: 50%;
-      border: none;
-      width: 20px;
-      height: 20px;
-      font-weight: bold;
       cursor: pointer;
-      z-index: 1000;
+      transition: background 0.3s ease;
+      z-index: 6;
     }
+    .cta:hover { background: #e65500; }
+    .controls {
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      background: #bbb;
+      border-radius: 50%;
+      margin: 0 3px;
+      cursor: pointer;
+    }
+    .dot.active { background: #ff6600; }
   </style>
 </head>
 <body>
-  <div id="carousel-container">
-    <button id="close-btn">X</button>
-    <div id="carousel" class="carousel"></div>
+  <div id="carousel">
+    <div class="slide" style="background-image:url('slide1.jpg');" data-link="https://www.avividai.com/"><div class="cta">了解更多</div></div>
+    <div class="slide" style="background-image:url('slide2.jpg');" data-link="https://www.avividai.com/"><div class="cta">了解更多</div></div>
+    <div class="slide" style="background-image:url('slide3.jpg');" data-link="https://www.avividai.com/"><div class="cta">了解更多</div></div>
+    <div class="slide" style="background-image:url('slide4.jpg');" data-link="https://www.avividai.com/"><div class="cta">了解更多</div></div>
+    <div class="slide" style="background-image:url('slide5.jpg');" data-link="https://www.avividai.com/"><div class="cta">了解更多</div></div>
+    <div class="slide" style="background-image:url('slide6.jpg');" data-link="https://www.avividai.com/"><div class="cta">了解更多</div></div>
+
+    <div class="controls">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
   </div>
+
   <script>
-    const images = ["slide1.jpg","slide2.jpg","slide3.jpg","slide4.jpg","slide5.jpg","slide6.jpg"];
-    const carousel = document.getElementById("carousel");
-    let current = 0;
-    let paused = false;
+    var slides = document.querySelectorAll(".slide");
+    var dots = document.querySelectorAll(".dot");
+    var current = 0;
 
-    function render() {
-      carousel.innerHTML = "";
-      images.forEach((img, i) => {
-        const angle = (i - current) * 45;
-        const scale = i === current ? 1 : 0.7;
-        const rotateY = (i - current) * 45;
-        const item = document.createElement("div");
-        item.className = "carousel-item";
-        item.style.transform = `translateX(${(i - current) * 160}px) scale(${scale}) rotateY(${rotateY}deg)`;
-        item.style.backgroundImage = `url(${img})`;
-        item.onclick = () => window.open("https://www.avividai.com/", "_blank");
-
-        const btn = document.createElement("div");
-        btn.className = "btn";
-        btn.innerText = "了解更多";
-        item.appendChild(btn);
-        carousel.appendChild(item);
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.remove("active", "left", "right");
+        if (index === current) slide.classList.add("active");
+        else if (index === (current - 1 + slides.length) % slides.length) slide.classList.add("left");
+        else if (index === (current + 1) % slides.length) slide.classList.add("right");
+      });
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === current);
       });
     }
 
-    function next() {
-      if (!paused) {
-        current = (current + 1) % images.length;
-        render();
-      }
+    function showSlide(index) {
+      current = (index + slides.length) % slides.length;
+      updateSlides();
     }
 
-    render();
-    let interval = setInterval(next, 3000);
+    dots.forEach((dot, index) => {
+      dot.onclick = () => showSlide(index);
+    });
 
-    document.getElementById("carousel-container").addEventListener("mouseenter", () => paused = true);
-    document.getElementById("carousel-container").addEventListener("mouseleave", () => paused = false);
-    document.getElementById("close-btn").onclick = () => {
-      window.frameElement?.parentNode?.removeChild(window.frameElement);
-    };
+    slides.forEach(slide => {
+      slide.onclick = () => window.open(slide.getAttribute("data-link"), "_blank");
+      slide.querySelector(".cta").onclick = (e) => {
+        e.stopPropagation();
+        window.open(slide.getAttribute("data-link"), "_blank");
+      };
+    });
 
-    let startX = 0;
-    carousel.addEventListener("touchstart", e => startX = e.touches[0].clientX);
-    carousel.addEventListener("touchend", e => {
-      const dx = e.changedTouches[0].clientX - startX;
-      if (dx > 30) current = (current - 1 + images.length) % images.length;
-      else if (dx < -30) current = (current + 1) % images.length;
-      render();
+    setInterval(() => { showSlide(current + 1); }, 3000);
+    updateSlides();
+
+    var startX = 0;
+    document.getElementById("carousel").addEventListener("touchstart", e => { startX = e.touches[0].clientX; });
+    document.getElementById("carousel").addEventListener("touchend", e => {
+      var endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) showSlide(current + 1);
+      else if (endX - startX > 50) showSlide(current - 1);
     });
   </script>
 </body>

@@ -1,89 +1,156 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI 行銷新聞網</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模擬新聞網站 - 長內文置底廣告</title>
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
+      font-family: 'Arial', sans-serif;
+      line-height: 1.8;
+      background: #f9f9f9;
     }
     header {
-      background: #d12d6c;
+      background: #c62828;
       color: white;
-      padding: 16px;
-      font-size: 20px;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    .container {
+    header h1 { margin: 0; font-size: 20px; }
+    nav a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    main {
       display: flex;
       padding: 20px;
-      max-width: 1200px;
-      margin: auto;
+      margin-bottom: 270px; /* 保留廣告區塊空間 */
     }
-    .main {
-      flex: 3;
-      padding-right: 20px;
+    article { flex: 3; margin-right: 20px; }
+    article h2 { font-size: 22px; margin-bottom: 10px; }
+    article img {
+      max-width: 100%;
+      border-radius: 6px;
+      margin-bottom: 15px;
     }
-    .main article {
-      background: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
-    .sidebar {
+    aside {
       flex: 1;
-    }
-    .sidebar h3 {
-      margin-top: 0;
-    }
-    .sidebar ul {
-      background: white;
-      padding: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 6px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      height: fit-content;
     }
-    .sidebar ul li {
-      margin-bottom: 10px;
-    }
-    iframe#ad-frame {
+    aside h3 { font-size: 16px; margin-bottom: 10px; }
+    aside ul { list-style: none; padding: 0; }
+    aside li { margin-bottom: 8px; font-size: 14px; }
+    footer {
       position: fixed;
       bottom: 0;
-      right: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 250px;
+      background: rgba(255,255,255,0.95);
+      border-top: 2px solid #ccc;
+      box-shadow: 0 -3px 8px rgba(0,0,0,0.2);
+    }
+    #ad-slot {
       width: 300px;
       height: 250px;
-      border: none;
-      z-index: 9999;
+      position: relative;
+      background: transparent;
+    }
+    .close-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #ff0000;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      z-index: 10;
     }
   </style>
 </head>
 <body>
-  <header>AI 行銷新聞網</header>
-  <div class="container">
-    <div class="main">
-      <article>
-        <h2>AI 驅動的數位廣告革命：RMN 與行銷自動化的未來</h2>
-        <p>在數位轉型時代，品牌競爭日益激烈，人工智慧（AI）與零售媒體網路（Retail Media Network, RMN）成為行銷人關注的焦點。AI 行銷工具可透過消費者數據進行個人化推薦，提升廣告投報率。RMN 則讓零售商能變現流量，同時協助品牌觸及高價值消費者。</p>
-        <p>研究指出，數據導向的行銷策略平均可提升 30% 廣告成效。隨著封閉式環境中第一方數據掌握度提升，品牌將更依賴零售商提供的數據交換平台（如 Likr Data Exchange Platform, LDEP）來擴大精準投放。</p>
-        <p>AviviD、Likr 等業者也提供從顧客推薦、聊天機器人到 AI-SEO 的全方位解決方案，協助品牌實現行銷自動化，提升用戶互動與轉換。</p>
-        <p>未來，AI 行銷與 RMN 將成為品牌必備戰略核心，懂得善用數據的品牌將脫穎而出。</p>
-        <p>……（以下略，為了模擬捲動效果，此段文字會重複）……</p>
-        <p>在數位轉型時代，品牌競爭日益激烈，人工智慧（AI）與零售媒體網路（Retail Media Network, RMN）成為行銷人關注的焦點。AI 行銷工具可透過消費者數據進行個人化推薦，提升廣告投報率。</p>
-      </article>
-    </div>
-    <aside class="sidebar">
+  <header>
+    <h1>Daily News</h1>
+    <nav>
+      <a href="#">即時</a>
+      <a href="#">財經</a>
+      <a href="#">娛樂</a>
+      <a href="#">科技</a>
+    </nav>
+  </header>
+  <main>
+    <article>
+      <h2>AviviD 推出 AI 行銷新方案，引領數位廣告新時代</h2>
+      <img src="https://via.placeholder.com/600x300" alt="新聞配圖">
+      <p>AviviD 今日宣布推出全新 AI 行銷解決方案，結合 SEO、自動化數據分析與智慧型廣告投放，
+      協助品牌在競爭激烈的數位市場中脫穎而出。專家指出，這項方案不僅能大幅提升投放效率，
+      還能幫助企業在隱私政策日益嚴格的環境下，找到更合規且高效的行銷策略。</p>
+
+      <p>行業觀察人士表示，隨著第三方 Cookie 的退場，廣告科技正進入一個全新的轉折點。
+      AviviD 的解決方案能在不依賴傳統 Cookie 的情況下，運用人工智慧整合零售媒體數據，
+      實現高度精準的受眾定向。</p>
+
+      <p>根據 AviviD 內部試點數據顯示，使用該方案的企業平均轉換率提升達 55%，
+      並在相同廣告預算下獲得了更高的投資報酬率。這對中小企業尤具吸引力，
+      因為能以有限資源獲得接近大型企業的行銷效果。</p>
+
+      <p>同時，AviviD 強調其系統具備高透明度，廣告主能即時查看數據報表，
+      包括用戶互動、轉換來源與受眾分布，讓決策更具數據依據。</p>
+
+      <p>專家分析，隨著零售媒體網路（RMN）在全球的崛起，
+      AviviD 的方案有望成為品牌進入 RMN 生態系的最佳入口。
+      這不僅讓零售商能創造新的營收來源，也使品牌能在購物決策的關鍵時刻觸及消費者。</p>
+
+      <p>此外，AviviD 計劃與多家零售商與媒體平台合作，擴大其 AI 行銷網絡版圖。
+      預期未來一年內，將有更多跨國企業與本地品牌選擇導入該系統，
+      為數位廣告市場注入新的動能。</p>
+
+      <p>總體而言，AviviD 的創新解決方案不僅符合未來數位行銷的趨勢，
+      也為產業帶來新的成長契機。業界預估，這將推動台灣與亞洲數位廣告市場進入新一波快速成長期。</p>
+    </article>
+    <aside>
       <h3>熱門文章</h3>
       <ul>
-        <li>什麼是 RMN？品牌不可不知的趨勢</li>
-        <li>AI 行銷案例：如何提升廣告轉換</li>
-        <li>數據交換平台的價值與應用</li>
-        <li>行銷自動化工具推薦 Top 5</li>
-        <li>零售媒體如何變現顧客流量</li>
-        <li>從 CRM 到 CDP：資料整合新思維</li>
+        <li>台灣數位廣告市場再創新高</li>
+        <li>AI 如何影響未來商業決策</li>
+        <li>跨境電商崛起，機會與挑戰</li>
+        <li>數據隱私與廣告科技新趨勢</li>
+        <li>零售媒體網路 RMN 的下一步</li>
+        <li>生成式 AI 如何改變廣告創意</li>
       </ul>
     </aside>
-  </div>
-  <iframe id="ad-frame" src="carousel/index.html"></iframe>
+  </main>
+  <footer>
+    <div id="ad-slot">
+      <div class="close-btn">&times;</div>
+      <iframe src="carousel/index.html" width="300" height="250" frameborder="0"></iframe>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelector('.close-btn').onclick = function() {
+      document.querySelector('footer').style.display = 'none';
+    };
+  </script>
 </body>
 </html>
