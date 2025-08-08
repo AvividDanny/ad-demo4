@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    #carousel-container {
+      width: 300px;
+      height: 250px;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 800px;
+    }
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease;
+      transform-style: preserve-3d;
+    }
+    .carousel-item {
+      position: absolute;
+      width: 300px;
+      height: 250px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+      transform-origin: center;
+      cursor: pointer;
+    }
+    .carousel-item .btn {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      font-size: 12px;
+      border-radius: 4px;
+    }
+    #close-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #fff;
+      border-radius: 50%;
+      border: none;
+      width: 20px;
+      height: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <div id="carousel-container">
+    <button id="close-btn">X</button>
+    <div id="carousel" class="carousel"></div>
+  </div>
+  <script>
+    const images = ["slide1.jpg","slide2.jpg","slide3.jpg","slide4.jpg","slide5.jpg","slide6.jpg"];
+    const carousel = document.getElementById("carousel");
+    let current = 0;
+    let paused = false;
+
+    function render() {
+      carousel.innerHTML = "";
+      images.forEach((img, i) => {
+        const angle = (i - current) * 45;
+        const scale = i === current ? 1 : 0.7;
+        const rotateY = (i - current) * 45;
+        const item = document.createElement("div");
+        item.className = "carousel-item";
+        item.style.transform = `translateX(${(i - current) * 160}px) scale(${scale}) rotateY(${rotateY}deg)`;
+        item.style.backgroundImage = `url(${img})`;
+        item.onclick = () => window.open("https://www.avividai.com/", "_blank");
+
+        const btn = document.createElement("div");
+        btn.className = "btn";
+        btn.innerText = "了解更多";
+        item.appendChild(btn);
+        carousel.appendChild(item);
+      });
+    }
+
+    function next() {
+      if (!paused) {
+        current = (current + 1) % images.length;
+        render();
+      }
+    }
+
+    render();
+    let interval = setInterval(next, 3000);
+
+    document.getElementById("carousel-container").addEventListener("mouseenter", () => paused = true);
+    document.getElementById("carousel-container").addEventListener("mouseleave", () => paused = false);
+    document.getElementById("close-btn").onclick = () => {
+      window.frameElement?.parentNode?.removeChild(window.frameElement);
+    };
+
+    let startX = 0;
+    carousel.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+    carousel.addEventListener("touchend", e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (dx > 30) current = (current - 1 + images.length) % images.length;
+      else if (dx < -30) current = (current + 1) % images.length;
+      render();
+    });
+  </script>
+</body>
+</html>
